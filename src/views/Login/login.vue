@@ -7,36 +7,37 @@
             </ul>
              <!-- 表单 start-->
             <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-  <el-form-item label="邮箱" prop="username">
-    <el-input type="text" v-model="ruleForm.username" autocomplete="off"></el-input>
-  </el-form-item>
+            <el-form-item label="邮箱" for="username" prop="username">
+              <el-input id="username" type="text" v-model="ruleForm.username" autocomplete="off"></el-input>
+            </el-form-item>
 
-  <el-form-item label="密码" prop="passwrod" >
-    <el-input type="password" v-model="ruleForm.passwrod" autocomplete="off" minlength="8" maxlength="20"></el-input>
-  </el-form-item>
+            <el-form-item label="密码" for="passwrod" prop="passwrod" >
+              <el-input id="passwrod" type="password" v-model="ruleForm.passwrod" autocomplete="off" minlength="8" maxlength="20"></el-input>
+            </el-form-item>
 
-<el-form-item label="确认密码" prop="passwrods" v-if="model === 'register'">
-    <el-input type="password" v-model="ruleForm.passwrods" autocomplete="off" minlength="8" maxlength="20"></el-input>
-  </el-form-item>
+          <el-form-item label="确认密码" for="passwrods" prop="passwrods" v-if="model === 'register'">
+              <el-input id="passwrods" type="password" v-model="ruleForm.passwrods" autocomplete="off" minlength="8" maxlength="20"></el-input>
+            </el-form-item>
 
-  <el-form-item label="验证码" prop="code">
-    <el-row :gutter="20">
-  <el-col style="padding:0" :span="10">
-    <el-input v-model.number="ruleForm.code"></el-input>
-  </el-col>
-  <el-col :span="12">
-    <el-button type="success" >获取验证码</el-button>
-  </el-col>
-</el-row>
-  </el-form-item>
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')" class="block">登陆</el-button>
-  </el-form-item>
-</el-form>
+            <el-form-item label="验证码" for="code" prop="code">
+              <el-row :gutter="20">
+            <el-col style="padding:0" :span="10">
+              <el-input id="code" v-model.number="ruleForm.code"></el-input>
+            </el-col>
+            <el-col :span="12">
+              <el-button type="success" @click="getSms()">获取验证码</el-button>
+            </el-col>
+          </el-row>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submitForm('ruleForm')" class="block" :disabled="loginButtonStatus">{{model === 'login'? '登录' : '注册'}}</el-button>
+            </el-form-item>
+          </el-form>
         </div>
     </div>
 </template>
 <script>
+import { GetSms } from "../../api/login";
 export default {
   name: "login",
   data() {
@@ -98,6 +99,9 @@ export default {
       ],
       // 模块的值
       model: "login",
+      //登录按钮的禁用
+      loginButtonStatus: true,
+
       // 表单数据  ---开始
       ruleForm: {
         username: "",
@@ -146,6 +150,21 @@ export default {
       this.model = data.type;
     },
     submitForm(formName) {
+      //发送请求
+      axios
+        .get("/user?ID=12345")
+        .then(function(response) {
+          // handle success
+          console.log(response);
+        })
+        .catch(function(error) {
+          // handle error
+          console.log(error);
+        })
+        .finally(function() {
+          // always executed
+        });
+
       this.$refs[formName].validate(valid => {
         if (valid) {
           alert("submit!");
@@ -157,7 +176,31 @@ export default {
     },
     resetForm(formName) {
       this.$refs[formName].resetFields();
+    },
+
+    /**
+     * 获取验证码
+     * */
+    getSms() {
+      //提示
+      if (this.ruleForm.username == "") {
+        this.$message.error("邮箱不能为空");
+        return false;
+      }
+      
+      //请求接口
+      let requestDate = { username: this.ruleForm.username, module: "login" };
+      GetSms(requestDate)
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
     }
+    /**
+     * 提交表单
+     */
   }
 };
 </script>
