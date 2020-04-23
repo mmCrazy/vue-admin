@@ -11,21 +11,21 @@
               <el-input id="username" type="text" v-model="ruleForm.username" autocomplete="off"></el-input>
             </el-form-item>
 
-            <el-form-item label="密码" for="passwrod" prop="passwrod" >
-              <el-input id="passwrod" type="password" v-model="ruleForm.passwrod" autocomplete="off" minlength="8" maxlength="20"></el-input>
+            <el-form-item label="密码" for="password" prop="password" >
+              <el-input id="password" type="password" v-model="ruleForm.password" autocomplete="off" minlength="8" maxlength="20"></el-input>
             </el-form-item>
 
-          <el-form-item label="确认密码" for="passwrods" prop="passwrods" v-if="model === 'register'">
-              <el-input id="passwrods" type="password" v-model="ruleForm.passwrods" autocomplete="off" minlength="8" maxlength="20"></el-input>
+          <el-form-item label="确认密码" for="passwords" prop="passwords" v-if="model === 'register'">
+              <el-input id="passwords" type="password" v-model="ruleForm.passwords" autocomplete="off" minlength="8" maxlength="20"></el-input>
             </el-form-item>
 
             <el-form-item label="验证码" for="code" prop="code">
               <el-row :gutter="20">
             <el-col style="padding:0" :span="10">
-              <el-input id="code" v-model.number="ruleForm.code"></el-input>
+              <el-input id="code" v-model="ruleForm.code"></el-input>
             </el-col>
             <el-col :span="12">
-              <el-button type="success" @click="getSms()">获取验证码</el-button>
+              <el-button type="success" @click="getSms()" :disabled="codeButtonStatus.status">{{ codeButtonStatus.text }}</el-button>
             </el-col>
           </el-row>
             </el-form-item>
@@ -37,7 +37,7 @@
     </div>
 </template>
 <script>
-import { GetSms } from "../../api/login";
+import { GetSms, Register, Login } from "../../api/login";
 export default {
   name: "login",
   data() {
@@ -67,7 +67,7 @@ export default {
     var validatePasswords = (rule, value, callback) => {
       if (value === "") {
         callback(new Error("请再次输入密码"));
-      } else if (value != this.ruleForm.passwrod) {
+      } else if (value != this.ruleForm.password) {
         callback(new Error("输入密码不一致"));
       } else {
         callback();
@@ -101,12 +101,18 @@ export default {
       model: "login",
       //登录按钮的禁用
       loginButtonStatus: true,
-
+      //倒计时定时器
+      timer: null,
+      //获取验证码按钮的禁用与文字
+      codeButtonStatus: {
+        status: false,
+        text: "获取验证码"
+      },
       // 表单数据  ---开始
       ruleForm: {
         username: "",
-        passwrod: "",
-        passwrods: "",
+        password: "",
+        passwords: "",
         code: ""
       },
       rules: {
@@ -116,13 +122,13 @@ export default {
             trigger: "blur"
           }
         ],
-        passwrod: [
+        password: [
           {
             validator: validatePassword,
             trigger: "blur"
           }
         ],
-        passwrods: [
+        passwords: [
           {
             validator: validatePasswords,
             trigger: "blur"
@@ -148,34 +154,10 @@ export default {
       data.current = true;
       //修改模块值
       this.model = data.type;
-    },
-    submitForm(formName) {
-      //发送请求
-      axios
-        .get("/user?ID=12345")
-        .then(function(response) {
-          // handle success
-          console.log(response);
-        })
-        .catch(function(error) {
-          // handle error
-          console.log(error);
-        })
-        .finally(function() {
-          // always executed
-        });
-
-      this.$refs[formName].validate(valid => {
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
+      //重置表单
+      this.$refs["ruleForm"].resetFields();
+      //清除获取验证码的定时器和改变text
+      this.clearCountDown();
     },
 
     /**
@@ -187,20 +169,131 @@ export default {
         this.$message.error("邮箱不能为空");
         return false;
       }
-      
+      //此时验证码按钮为禁用和文字为发送中
+      this.codeButtonStatus.status = true;
+      this.codeButtonStatus.text = "发送中";
       //请求接口
-      let requestDate = { username: this.ruleForm.username, module: "login" };
-      GetSms(requestDate)
+      let requestDate = {
+        username: this.ruleForm.username,
+        module: this.model
+      };
+      setTimeout(() => {
+        GetSms(requestDate)
+          .then(response => {
+            let data = response.data;
+            this.$message({
+              showClose: true,
+              message: data.message,
+              type: "success"
+            });
+            //启用登录注册按钮
+            this.loginButtonStatus = false;
+            this.countDown(60);
+            console.log(data);
+          })
+          .catch(error => {
+            console.log(error);
+          });
+      }, 3000);
+    },
+
+    //获取验证码倒计时
+    countDown(number) {
+      if (this.timer) {
+        clearInterval(this.timer);
+      }
+      let time = number;
+      this.timer = setInterval(() => {
+        time--;
+        console.log(time);
+        if (time == 0) {
+          clearInterval(this.timer);
+          this.codeButtonStatus.status = false;
+          this.codeButtonStatus.text = "获取验证码";
+        } else {
+          this.codeButtonStatus.text = `倒计时${time}秒`;
+        }
+      }, 1000);
+    },
+
+    //清除倒计时的方法
+    clearCountDown() {
+      //验证码按钮高亮
+      this.codeButtonStatus.status = false;
+      this.codeButtonStatus.text = "获取验证码";
+      //清除定时器
+      clearInterval(this.timer);
+    },
+
+    /**
+     * 注册请求
+     */
+    register() {
+      let registerData = {
+        username: this.ruleForm.username,
+        password: this.ruleForm.password,
+        code: this.ruleForm.code,
+        module: "register"
+      };
+      Register(registerData)
         .then(response => {
-          console.log(response);
+          let data = response.data;
+          console.log(data);
+          this.$message({
+            showClose: true,
+            message: data.message,
+            type: "success"
+          });
+          //注册成功后跳转到登录的界面
+          this.toggleMenu(this.menuTab[0]);
+          this.clearCountDown();
+        })
+        .catch(error => {
+          console.log(error)
+          // this.$message.error(error);
+        });
+    },
+    /**
+     * 登录请求
+     */
+    login() {
+      let LoginDate = {
+        username: this.ruleForm.username,
+        password: this.ruleForm.password,
+        code: this.ruleForm.code,
+      };
+      Login(LoginDate)
+        .then(response => {
+          let data = response.data;
+          console.log(data);
+          this.$message({
+            showClose: true,
+            message: data.message,
+            type: "success"
+          });
+         //清理定时器
+          this.clearCountDown();
         })
         .catch(error => {
           console.log(error);
+          // this.$message.error(error);
         });
-    }
+    },
     /**
      * 提交表单
      */
+    submitForm(formName) {
+      this.$refs[formName].validate(valid => {
+        //表单验证通过
+        if (valid) {
+          // console.log(this.model)
+          this.model === "login" ? this.login() : this.register();
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    }
   }
 };
 </script>
