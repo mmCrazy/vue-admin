@@ -5,19 +5,31 @@ import VueRouter from "vue-router";
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: "/",
-    redirect: "login"
-  },
-  {
-    path: "/login",
-    name: "Login",
-    component: ()=>import("../views/Login/login.vue")
-  }
+    {
+        path: "/",
+        redirect: "login"
+    },
+    {
+        path: "/login",
+        name: "Login",
+        component: () => import("../views/Login/login.vue")
+    },
+    {
+        path: "/console",
+        name: "Console",
+        component: () => import("../views/Layout/layout.vue"),
+        children: [
+            {
+                path: "/console",
+                name: "Console",
+                component: () => import("../views/Console/console.vue")
+            }
+        ]
+    }
 ];
 
 const router = new VueRouter({
-  routes
+    routes
 });
 
 export default router;

@@ -31,7 +31,7 @@ module.exports = {
     // css预设器配置项
     loaderOptions: {
       scss:{ 
-        prependData: `@import "./src/style/normalize";`
+        prependData: `@import "./src/style/main";`
       }
     },
     requireModuleExtension: true

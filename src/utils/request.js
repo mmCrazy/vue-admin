@@ -14,7 +14,16 @@
 
 //请求接口前，做一些数据处理（请求拦截器）
  service.interceptors.request.use(function (config) {
-    // Do something before request is sent
+    // 在发送请求之前需要做什么
+    //在请求头添加参数
+    //Tokey
+    //userId
+    //sui
+    //业务需求
+    config.headers['Tokey'] = "123";
+    config.headers['userId'] = "MZH";
+    config.headers['sui'] = "456";
+    
     return config;
   }, function (error) {
     // Do something with request error

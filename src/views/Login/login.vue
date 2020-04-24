@@ -37,6 +37,7 @@
     </div>
 </template>
 <script>
+import sha1 from "sha1";
 import { GetSms, Register, Login } from "../../api/login";
 export default {
   name: "login",
@@ -155,9 +156,20 @@ export default {
       //修改模块值
       this.model = data.type;
       //重置表单
-      this.$refs["ruleForm"].resetFields();
+      this.resetFormData();
       //清除获取验证码的定时器和改变text
       this.clearCountDown();
+    },
+
+    //重置表单
+    resetFormData() {
+      this.$refs["ruleForm"].resetFields();
+    },
+
+    //修改获取验证码按钮的状态
+    updataButtonStatus(params) {
+      this.codeButtonStatus.status = params.status;
+      this.codeButtonStatus.text = params.text;
     },
 
     /**
@@ -170,8 +182,12 @@ export default {
         return false;
       }
       //此时验证码按钮为禁用和文字为发送中
-      this.codeButtonStatus.status = true;
-      this.codeButtonStatus.text = "发送中";
+      this.updataButtonStatus({
+        status: true,
+        text: "发送中"
+      });
+      // this.codeButtonStatus.status = true;
+      // this.codeButtonStatus.text = "发送中";
       //请求接口
       let requestDate = {
         username: this.ruleForm.username,
@@ -208,8 +224,12 @@ export default {
         console.log(time);
         if (time == 0) {
           clearInterval(this.timer);
-          this.codeButtonStatus.status = false;
-          this.codeButtonStatus.text = "获取验证码";
+          this.updataButtonStatus({
+            status: false,
+            text: "获取验证码"
+          });
+          // this.codeButtonStatus.status = false;
+          // this.codeButtonStatus.text = "获取验证码";
         } else {
           this.codeButtonStatus.text = `倒计时${time}秒`;
         }
@@ -219,8 +239,12 @@ export default {
     //清除倒计时的方法
     clearCountDown() {
       //验证码按钮高亮
-      this.codeButtonStatus.status = false;
-      this.codeButtonStatus.text = "获取验证码";
+      this.updataButtonStatus({
+        status: false,
+        text: "获取验证码"
+      });
+      // this.codeButtonStatus.status = false;
+      // this.codeButtonStatus.text = "获取验证码";
       //清除定时器
       clearInterval(this.timer);
     },
@@ -231,7 +255,7 @@ export default {
     register() {
       let registerData = {
         username: this.ruleForm.username,
-        password: this.ruleForm.password,
+        password: sha1(this.ruleForm.password),
         code: this.ruleForm.code,
         module: "register"
       };
@@ -249,7 +273,7 @@ export default {
           this.clearCountDown();
         })
         .catch(error => {
-          console.log(error)
+          console.log(error);
           // this.$message.error(error);
         });
     },
@@ -259,20 +283,29 @@ export default {
     login() {
       let LoginDate = {
         username: this.ruleForm.username,
-        password: this.ruleForm.password,
-        code: this.ruleForm.code,
+        password: sha1(this.ruleForm.password),
+        code: this.ruleForm.code
       };
       Login(LoginDate)
         .then(response => {
           let data = response.data;
-          console.log(data);
+          console.log(response);
+          console.log("登录成功");
           this.$message({
             showClose: true,
             message: data.message,
             type: "success"
           });
-         //清理定时器
+          //清理定时器
           this.clearCountDown();
+          //控制台页面的跳转
+          this.$router.push({
+            name:"Console",
+            params:{
+              id:'',
+              user:''
+            }
+          })
         })
         .catch(error => {
           console.log(error);
@@ -289,6 +322,7 @@ export default {
           // console.log(this.model)
           this.model === "login" ? this.login() : this.register();
         } else {
+          this.clearCountDown()
           console.log("error submit!!");
           return false;
         }
