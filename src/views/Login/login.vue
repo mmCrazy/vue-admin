@@ -300,7 +300,7 @@ export default {
           this.clearCountDown();
           //控制台页面的跳转
           this.$router.push({
-            name:"Console",
+            name:"Layout",
             params:{
               id:'',
               user:''

@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-    
+    name:"console"
 }
 </script>
 <style lang="scss" scoped>

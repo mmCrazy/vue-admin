@@ -1,8 +1,8 @@
 <template lang="">
     <div id="layout">
-        <LayoutHeader/>
-        <LayoutNav/>
-        <LayoutMain/>
+        <LayoutHeader />
+        <LayoutNav />
+        <LayoutMain />
     </div>
 </template>
 <script>
@@ -16,6 +16,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 #layout {
-    // background-color: #f7f7f7;
+  // background-color: #f7f7f7;
 }
 </style>
