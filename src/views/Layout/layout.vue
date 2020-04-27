@@ -1,5 +1,5 @@
 <template lang="">
-    <div id="layout">
+    <div id="layout" :class="[isCollapse ? 'close' : 'open']">
         <LayoutHeader />
         <LayoutNav />
         <LayoutMain />
@@ -11,7 +11,12 @@ import LayoutMain from "./Components/Main";
 import LayoutHeader from "./Components/Header";
 export default {
   name: "layout",
-  components: { LayoutNav, LayoutMain, LayoutHeader }
+  components: { LayoutNav, LayoutMain, LayoutHeader },
+  computed: {
+    isCollapse(){
+      return this.$store.state.isCollapse
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>

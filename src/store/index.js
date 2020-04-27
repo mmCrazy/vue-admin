@@ -13,7 +13,7 @@ export default new Vuex.Store({
     mutations: {
         SET_COLLAPSE(state) {
             state.isCollapse = !state.isCollapse;
-            console.log(state.isCollapse);
+           // console.log(state.isCollapse);
         }
     },
     actions: {},

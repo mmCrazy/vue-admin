@@ -14,16 +14,14 @@
 <script>
 export default {
   name: "Header",
-  data(){
-      return {
-
-      }
+  data() {
+    return {};
   },
   methods: {
-    navMenuState(){
-        this.$store.commit("SET_COLLAPSE");
-    }  
-  },
+    navMenuState() {
+      this.$store.commit("SET_COLLAPSE");
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
@@ -37,6 +35,18 @@ export default {
   background-color: white;
   box-shadow: 0 3px 16px rgba(0, 0, 0, 0.1);
   line-height: 75px;
+}
+.open {
+  #header-wrap {
+    // left: $navMenu;
+  @include webkit(transition, all 0.3s ease 0s);
+
+  }
+}
+.close {
+  #header-wrap {
+    left: $navMenuMin;
+  }
 }
 .header-icon {
   padding: 0 32px;

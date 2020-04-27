@@ -26,5 +26,16 @@ export default {
   width: 100%;
   border: 30px solid #f7f7f7;
   background-color: #fff;
+  @include webkit(transition, all 0.3s ease 0s);
+}
+.open {
+  .main-content {
+    left: $navMenu;
+  }
+}
+.close {
+  .main-content {
+    left: $navMenuMin;
+  }
 }
 </style>

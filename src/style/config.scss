@@ -1,5 +1,15 @@
 // 后台框架尺寸
 // 菜单宽度
 $navMenu: 200px;
+$navMenuMin: 60px;
 //导航栏主颜色
 $mainColor: rgba(165, 165, 165, .5);
+
+//c3属性兼容的的方法
+@mixin webkit($style,$value) {
+    -webkit-#{$style}: $value;
+    -moz-#{$style}: $value;
+    -o-#{$style}: $value;
+    -ms-#{$style}: $value;
+    #{$style}:$value;
+}
