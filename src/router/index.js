@@ -29,7 +29,7 @@ const routes = [
         redirect: "console",
         meta: {
             name: "控制台",
-            icon: "el-icon-user"
+            icon: "console"
         },
         component: () => import("../views/Layout/layout.vue"),
         children: [
@@ -49,7 +49,7 @@ const routes = [
         name: "Info",
         meta: {
             name: "信息管理",
-            icon: "console"
+            icon: "info"
         },
         component: () => import("../views/Layout/layout.vue"),
         children: [
@@ -77,7 +77,7 @@ const routes = [
         name: "User",
         meta: {
             name: "用户",
-            icon: "console"
+            icon: "user"
         },
         component: () => import("../views/Layout/layout.vue"),
         children: [

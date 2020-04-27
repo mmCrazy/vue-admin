@@ -1,6 +1,9 @@
 <template lang="">
-    <div id="main">
-    <router-view />
+    <div id="main-wrap">
+      <div class="main-content">
+        <div class="content"><router-view /></div>
+      </div>
+    
     </div>
 </template>
 <script>
@@ -10,7 +13,11 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import "../../../style/config";
-#main {
+#main-wrap {
+  height: 100vh;
+  
+}
+.main-content{
   position: fixed;
   top: 75px;
   right: 0;
@@ -18,6 +25,6 @@ export default {
   height: 100%;
   width: 100%;
   border: 30px solid #f7f7f7;
-  background-color: rgb(131, 250, 151);
+  background-color: #fff;
 }
 </style>

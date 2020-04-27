@@ -1,6 +1,6 @@
 <template>
   <div>
-   userIndex
+   用户列表
   </div>
 </template>
 <script>

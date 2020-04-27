@@ -2,9 +2,12 @@
 .el-submenu .el-menu-item {
     font-size:14px;
     padding-left: 59px !important;
-    &.is-active{background-color: rgb(250, 232, 235) !important;}
+    &.is-active{color: skyblue !important;}
 }
 //修改一级菜单栏
 li.el-submenu {
     &.is-active.is-opened .el-submenu__title{ background-color: $mainColor !important;}
+}
+.el-menu {
+    border: none;
 }

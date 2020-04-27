@@ -1,5 +1,6 @@
 <template lang="">
-    <div id="navbar">
+    <div id="nav-wrap">
+      <h1 class="logo"><img src="../../../assets/images/logo.jpg" alt=""></h1>
         <el-menu default-active="1-4-1" 
         class="el-menu-vertical-demo" 
         @open="handleOpen" 
@@ -13,7 +14,7 @@
                 <el-submenu v-if="!item.hidden" :key="item.id" :index="index + ''">
                     <!-- 一级菜单 -->
                     <template slot="title">
-                    <i :class="item.meta.icon"></i>
+                    <svg-icon :iconClass="item.meta.icon" :className="item.meta.icon" />                  
                     <span slot="title">{{ item.meta.name}}</span>
                     </template>
                     <!-- 子菜单 -->
@@ -21,7 +22,6 @@
                 </el-submenu>
             </template>
         </el-menu> 
-        <svg-icon iconClass="true" className="false"></svg-icon>
     </div>
 </template>
 <script>
@@ -29,34 +29,48 @@ export default {
   name: "navMenu",
   data() {
     return {
-      isCollapse: false,
-      routers: this.$router.options.routes,
+      // isCollapse: false,
+      routers: this.$router.options.routes
     };
   },
-  created() {
-      
-  },
+  created() {},
   mounted() {
-    console.log(this.routers);
-    },
+    // console.log(this.routers);
+  },
   methods: {
-      handleOpen(key, keyPath) {
-        console.log(key, keyPath);
-      },
-      handleClose(key, keyPath) {
-        console.log(key, keyPath);
-      },
-  }
+    handleOpen(key, keyPath) {
+      // console.log(key, keyPath);
+    },
+    handleClose(key, keyPath) {
+      // console.log(key, keyPath);
+    }
+  },
+  computed: {
+     isCollapse(){
+       return this.$store.state.isCollapse;
+    }
+  },
 };
 </script>
 <style lang="scss" scoped>
 @import "../../../style/config";
-#navbar {
+.logo{
+  img{
+    width: 100%;
+  }
+}
+#nav-wrap {
   position: fixed;
   top: 0;
   left: 0;
   width: $navMenu;
   height: 100%;
-  background-color: skyblue;
+  // background-color: rgba(43, 49, 63, .8);
+  background-image: linear-gradient(to bottom, #19202b , #535863);
+  svg{
+    font-size: 20px;
+    margin-right: 10px;
+  }
 }
+
 </style>
