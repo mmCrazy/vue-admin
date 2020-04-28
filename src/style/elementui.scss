@@ -11,3 +11,21 @@ li.el-submenu {
 .el-menu {
     border: none;
 }
+
+//导航栏收起的时候经过导航栏样式的改变
+.close {
+    .el-submenu {
+        &.is-opened {
+            > .el-submenu__title {
+                background-color: $mainColor !important;
+            }
+        }
+    }
+}
+.el-menu--vertical {
+    .el-menu { background-color: #515661 !important; }
+    .el-menu-item { line-height: 56px; }
+    .el-menu-item:hover {
+        background-color: $mainColor !important;
+    }
+}

@@ -83,7 +83,7 @@ export default {
   }
   .logo {
     img {
-      width: 200px;
+      width: $navMenu;
     }
   }
 }
@@ -93,7 +93,7 @@ export default {
   }
   .logo {
     img {
-      width: 60px;
+      width: $navMenuMin;
     }
   }
 }
