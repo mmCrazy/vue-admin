@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Vuex from "vuex";
-import Cookie from "js-cookie";
+// import Cookie from "js-cookie";
+import { Login } from "../api/login";
 
 Vue.use(Vuex);
 
@@ -27,6 +28,24 @@ export default new Vuex.Store({
             // Cookie.set("isCollapse", JSON.stringify(state.isCollapse));
         }
     },
-    actions: {},
+    actions: {
+      // login(content,data){   //login({state,getters},data)
+      //   content.state
+      //   content.getters
+      //   content.commit
+      //   content.rootGetters
+      //   content.rootState
+      // }
+
+      login(content,LoginDate){
+        return new Promise((resolve,reject)=>{
+          Login(LoginDate).then((response)=>{
+            resolve(response);
+          }).catch((error)=>{
+            reject(error)
+          })
+        })
+      }
+    },
     modules: {}
 });

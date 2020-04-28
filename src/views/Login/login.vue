@@ -286,7 +286,9 @@ export default {
         password: sha1(this.ruleForm.password),
         code: this.ruleForm.code
       };
-      Login(LoginDate)
+
+      this.$store
+        .dispatch("login", LoginDate)
         .then(response => {
           let data = response.data;
           console.log(response);
@@ -300,17 +302,43 @@ export default {
           this.clearCountDown();
           //控制台页面的跳转
           this.$router.push({
-            name:"Layout",
-            params:{
-              id:'',
-              user:''
+            name: "Layout",
+            params: {
+              id: "",
+              user: ""
             }
-          })
+          });
         })
         .catch(error => {
           console.log(error);
           // this.$message.error(error);
         });
+
+      // Login(LoginDate)
+      //   .then(response => {
+      //     let data = response.data;
+      //     console.log(response);
+      //     console.log("登录成功");
+      //     this.$message({
+      //       showClose: true,
+      //       message: data.message,
+      //       type: "success"
+      //     });
+      //     //清理定时器
+      //     this.clearCountDown();
+      //     //控制台页面的跳转
+      //     this.$router.push({
+      //       name:"Layout",
+      //       params:{
+      //         id:'',
+      //         user:''
+      //       }
+      //     })
+      //   })
+      //   .catch(error => {
+      //     console.log(error);
+      //     // this.$message.error(error);
+      //   });
     },
     /**
      * 提交表单
@@ -322,7 +350,7 @@ export default {
           // console.log(this.model)
           this.model === "login" ? this.login() : this.register();
         } else {
-          this.clearCountDown()
+          this.clearCountDown();
           console.log("error submit!!");
           return false;
         }
@@ -363,6 +391,7 @@ export default {
 }
 
 #login {
+  box-sizing: border-box;
   padding-top: 100px;
   height: 100vh;
   background-image: url("../../assets/images/14.jpg");
