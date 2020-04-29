@@ -1,11 +1,9 @@
 import router from "./index";
-import { getToken, } from "../utils/app";
+import { getToken } from "../utils/app";
 
 const whiteRouter = ['/login']; //indexof方法，判断数组中是否存在指定的某个对象，如果不存在，则返回-1
 router.beforeEach((to, from, next) => {
     if (getToken()) {
-
-        getToken();
         console.log("存在");
         next();
     } else {

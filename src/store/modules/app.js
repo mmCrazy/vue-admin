@@ -26,7 +26,7 @@ const mutations = {
     SET_USERNAME(state,data){
         Cookie.set(state.username,data);
     },
-    SET_ADMINCOOKIE(state,data){
+    SET_TOKEN(state,data){
         Cookie.set(state.admin_token,data);
     }
 };
@@ -46,7 +46,7 @@ const actions = {
                     let data = response.data.data;
                     console.log("data:"+data.username);
                     content.commit("SET_USERNAME",data.username);
-                    content.commit("SET_ADMINCOOKIE",data.token);
+                    content.commit("SET_TOKEN",data.token);
                     setToken(data.token);
                     setUserName(data.username);
                     resolve(response);
