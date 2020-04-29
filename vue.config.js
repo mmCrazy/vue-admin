@@ -65,7 +65,7 @@ module.exports = {
     hotOnly: false,
     proxy: {
       '/devApi': {
-          target: "http://www.web-jshtml.cn/productapi", //API服务器的地址  http://www.web-jshtml.cn/api
+          target: "http://www.web-jshtml.cn/productapi/token", //API服务器的地址  http://www.web-jshtml.cn/api
           changeOrigin: true,
           pathRewrite: {
               '^/devApi': '' //这里为空是因为target已经附带了文件夹productapi,如果target只是一个url网址,则此处需要改为请求文件夹的名称

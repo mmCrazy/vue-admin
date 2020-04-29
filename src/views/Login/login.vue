@@ -288,7 +288,7 @@ export default {
       };
 
       this.$store
-        .dispatch("login", LoginDate)
+        .dispatch("app/login", LoginDate)
         .then(response => {
           let data = response.data;
           console.log(response);
