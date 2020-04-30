@@ -3,23 +3,39 @@
         <div class="pull-left header-icon"><svg-icon iconClass="menu" className="menu" @click="navMenuState" /></div>
         <div class="pull-right header-icon">
             <div class="user-info pull-left">
-                 <img src="../../../assets/images/userHeader.png" alt="">MZH
+                 <img src="../../../assets/images/userHeader.png" alt="">{{username}}
             </div>
-            <div class="header-info pull-left">
+            <div class="header-info pull-left" @click="exit">
                 <svg-icon iconClass="exit" className="exit" />
             </div>
         </div>
     </div>
 </template>
 <script>
+import store from "../../../store/index";
+import { removeToken, removeUserName } from "../../../utils/app";
 export default {
   name: "Header",
   data() {
-    return {};
+    return {
+      username: store.state.app.username
+    };
   },
   methods: {
+    //设置控制导航菜单栏的展开收起的状态
     navMenuState() {
       this.$store.commit("app/SET_COLLAPSE");
+    },
+    //退出登陆
+    exit() {
+      console.log("退出登陆");
+      this.$router.push({
+        name: "Login"
+      });
+      store.commit("app/SET_TOKEN", "");
+      store.commit("app/SET_USERNAME", "");
+      removeToken();
+      removeUserName();
     }
   }
 };
@@ -39,8 +55,7 @@ export default {
 .open {
   #header-wrap {
     // left: $navMenu;
-  @include webkit(transition, all 0.3s ease 0s);
-
+    @include webkit(transition, all 0.3s ease 0s);
   }
 }
 .close {

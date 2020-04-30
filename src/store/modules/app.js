@@ -1,11 +1,10 @@
 import { Login } from "../../api/login";
-import Cookie from "js-cookie";
-import { setToken,setUserName} from "../../utils/app";
+import { setToken, setUserName, getUserName } from "../../utils/app";
 const state = {
     isCollapse: JSON.parse(sessionStorage.getItem("isCollapse")) || false,
     // isCollapse: JSON.parse(Cookie.get("isCollapse")) || false
-    username:'',
-    admin_token:''
+    username: getUserName() || "",
+    admin_token: ""
 };
 
 const getters = {
@@ -23,11 +22,11 @@ const mutations = {
         //cookie 存储
         // Cookie.set("isCollapse", JSON.stringify(state.isCollapse));
     },
-    SET_USERNAME(state,data){
-        Cookie.set(state.username,data);
+    SET_USERNAME(state, value) {
+        state.username = value;
     },
-    SET_TOKEN(state,data){
-        Cookie.set(state.admin_token,data);
+    SET_TOKEN(state, value) {
+        state.admin_token = value;
     }
 };
 
@@ -44,9 +43,8 @@ const actions = {
             Login(LoginDate)
                 .then(response => {
                     let data = response.data.data;
-                    console.log("data:"+data.username);
-                    content.commit("SET_USERNAME",data.username);
-                    content.commit("SET_TOKEN",data.token);
+                    content.commit("SET_USERNAME", data.username);
+                    content.commit("SET_TOKEN", data.token);
                     setToken(data.token);
                     setUserName(data.username);
                     resolve(response);
