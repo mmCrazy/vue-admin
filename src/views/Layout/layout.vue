@@ -1,8 +1,8 @@
 <template lang="">
     <div id="layout" :class="[isCollapse ? 'close' : 'open']">
         <LayoutHeader />
-        <LayoutNav />
         <LayoutMain />
+        <LayoutNav />
     </div>
 </template>
 <script>
