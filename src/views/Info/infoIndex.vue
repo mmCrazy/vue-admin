@@ -1,16 +1,23 @@
 <template>
   <div>
-    <el-row :gutter="14">
+    <el-row :gutter="14" style="margin-bottom:15px">
       <el-col :span="4">
         <div class="label-wrap category">
           <label for="">分类：</label>
           <div class="warp-content">
             <el-select
+              v-model="formInline.region"
               placeholder="请选择"
               style="width: 100%;"
             >
-              <el-option>
-              </el-option>
+              <el-option
+                label="区域一"
+                value="shanghai"
+              ></el-option>
+              <el-option
+                label="区域二"
+                value="beijing"
+              ></el-option>
             </el-select>
           </div>
         </div>
@@ -37,11 +44,18 @@
           <label for="">关键字：&nbsp;&nbsp;</label>
           <div class="warp-content">
             <el-select
+              v-model="formInline.region"
               placeholder="请选择"
               style="width: 100%;"
             >
-              <el-option>
-              </el-option>
+              <el-option
+                label="区域一"
+                value="shanghai"
+              ></el-option>
+              <el-option
+                label="区域二"
+                value="beijing"
+              ></el-option>
             </el-select>
           </div>
         </div>
@@ -96,10 +110,18 @@
         label="地址"
       >
       </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址"
-      >
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button
+            size="mini"
+            @click="handleEdit(scope.$index, scope.row)"
+          >编辑</el-button>
+          <el-button
+            size="mini"
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)"
+          >删除</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </div>
@@ -113,7 +135,7 @@ export default {
         user: "",
         region: ""
       },
-      value1: "",
+      value1: "123",
       tableData: [
         {
           date: "2016-05-02",
@@ -141,6 +163,12 @@ export default {
   methods: {
     onSubmit() {
       console.log("submit!");
+    },
+    handleEdit(index, row) {
+      console.log(index, row);
+    },
+    handleDelete(index, row) {
+      console.log(index, row);
     }
   }
 };

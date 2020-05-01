@@ -17,7 +17,6 @@ export default {
   height: 100vh;
 }
 .main-content {
-  z-index: -1;
   position: fixed;
   top: 75px;
   right: 0;

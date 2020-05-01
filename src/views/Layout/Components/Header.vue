@@ -46,16 +46,17 @@ export default {
   position: fixed;
   top: 0;
   right: 0;
-  left: $navMenu;
+  // left: $navMenu;
   height: 75px;
   background-color: white;
   box-shadow: 0 3px 16px rgba(0, 0, 0, 0.1);
+  @include webkit(transition, all 0.3s ease 0s);
+
   line-height: 75px;
 }
 .open {
   #header-wrap {
-    // left: $navMenu;
-    @include webkit(transition, all 0.3s ease 0s);
+    left: $navMenu;
   }
 }
 .close {
