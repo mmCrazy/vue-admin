@@ -1,6 +1,9 @@
 <template>
   <div>
-    <el-row :gutter="14" style="margin-bottom:15px">
+    <el-row
+      :gutter="14"
+      style="margin-bottom:15px"
+    >
       <el-col :span="4">
         <div class="label-wrap category">
           <label for="">分类：</label>
@@ -78,26 +81,35 @@
           type="danger"
           class="pull-right"
           style="width: 100%;"
+          @click="dialogTableVisible = true"
         >新增</el-button>
       </el-col>
     </el-row>
 
     <!-- 表格 -->
     <el-table
+      ref="multipleTable"
+      @selection-change="handleSelectionChange"
       :data="tableData"
       border
-      style="width: 100%"
+      style="width: 100%;margin-bottom: 20px"
     >
+
+      <el-table-column
+        type="selection"
+        width="40"
+      >
+      </el-table-column>
       <el-table-column
         prop="date"
         label="日期"
-        width="180"
+        width="100"
       >
       </el-table-column>
       <el-table-column
         prop="name"
         label="姓名"
-        width="180"
+        width="100"
       >
       </el-table-column>
       <el-table-column
@@ -114,6 +126,7 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
+            type="success"
             @click="handleEdit(scope.$index, scope.row)"
           >编辑</el-button>
           <el-button
@@ -124,6 +137,26 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-button>批量删除</el-button>
+    <el-pagination
+      class="pull-right"
+      background
+      layout="prev, pager, next"
+      :total="100"
+    >
+    </el-pagination>
+
+    <!-- 弹窗 -->
+    <el-dialog
+      title="收货地址"
+      :visible.sync="dialogTableVisible"
+      :modal-append-to-body='false'
+    >
+        <el-table >
+          123
+        </el-table>
+      </el-dialog>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -136,6 +169,7 @@ export default {
         region: ""
       },
       value1: "123",
+      dialogTableVisible: false,
       tableData: [
         {
           date: "2016-05-02",
@@ -161,14 +195,23 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
-      console.log("submit!");
-    },
     handleEdit(index, row) {
       console.log(index, row);
     },
     handleDelete(index, row) {
       console.log(index, row);
+    },
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
     }
   }
 };

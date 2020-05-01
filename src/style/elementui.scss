@@ -29,3 +29,16 @@ li.el-submenu {
         background-color: $mainColor !important;
     }
 }
+
+// 用户列表--表单table样式
+div.el-table {
+    td, th { text-align: center; }
+    th {
+        font-weight: bold;
+        color: #344a5f;
+    }
+    td { font-size: 14px; }
+}
+.el-table-column--selection .cell{
+    padding-right: 9px;
+}
