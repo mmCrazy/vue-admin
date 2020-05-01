@@ -74,7 +74,7 @@ export default {
 .user-info {
   height: 100%;
   padding: 0 32px;
-  border: 1px solid white;
+  // border: 1px solid white;
   + .header-icon {
     padding: 0 28px;
   }

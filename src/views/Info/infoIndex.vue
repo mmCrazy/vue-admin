@@ -32,11 +32,17 @@
           </div>
         </div>
       </el-col>
-      <el-col :span="3">
+      <el-col :span="4">
         <div class="label-wrap key-work">
           <label for="">关键字：&nbsp;&nbsp;</label>
           <div class="warp-content">
-            <SelectVue />
+            <el-select
+              placeholder="请选择"
+              style="width: 100%;"
+            >
+              <el-option>
+              </el-option>
+            </el-select>
           </div>
         </div>
       </el-col>
@@ -62,6 +68,40 @@
       </el-col>
     </el-row>
 
+    <!-- 表格 -->
+    <el-table
+      :data="tableData"
+      border
+      style="width: 100%"
+    >
+      <el-table-column
+        prop="date"
+        label="日期"
+        width="180"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="name"
+        label="姓名"
+        width="180"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="地址"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="地址"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="address"
+        label="地址"
+      >
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 <script>
@@ -74,6 +114,28 @@ export default {
         region: ""
       },
       value1: "",
+      tableData: [
+        {
+          date: "2016-05-02",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1518 弄"
+        },
+        {
+          date: "2016-05-04",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1517 弄"
+        },
+        {
+          date: "2016-05-01",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1519 弄"
+        },
+        {
+          date: "2016-05-03",
+          name: "王小虎",
+          address: "上海市普陀区金沙江路 1516 弄"
+        }
+      ]
     };
   },
   methods: {
@@ -93,7 +155,7 @@ export default {
     @include labelDom(right, 93, 40);
   }
   &.key-work {
-    @include labelDom(right, 99, 40);
+    @include labelDom(right, 80, 40);
   }
 }
 </style>

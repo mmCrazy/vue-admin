@@ -8,16 +8,16 @@
 </template>
 <script>
 export default {
-    name:"Main"
+  name: "Main"
 };
 </script>
 <style lang="scss" scoped>
 @import "../../../style/config";
 #main-wrap {
   height: 100vh;
-  
 }
-.main-content{
+.main-content {
+  z-index: -1;
   position: fixed;
   top: 75px;
   right: 0;
@@ -39,10 +39,10 @@ export default {
   }
 }
 .content {
-    width: 100%;
-    height: 100%;
-    padding: 30px 30px 0 30px;
-    background-color: #fff;
-    @include webkit(box-sizing,border-box);
+  width: 100%;
+  height: 100%;
+  padding: 30px 30px 0 30px;
+  background-color: #fff;
+  @include webkit(box-sizing, border-box);
 }
 </style>
