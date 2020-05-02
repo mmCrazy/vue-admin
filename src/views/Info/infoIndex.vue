@@ -6,10 +6,10 @@
     >
       <el-col :span="4">
         <div class="label-wrap category">
-          <label for="">分类：</label>
+          <label for="">类型：</label>
           <div class="warp-content">
             <el-select
-              v-model="formInline.region"
+              v-model="categoryValue.region"
               placeholder="请选择"
               style="width: 100%;"
             >
@@ -31,7 +31,7 @@
           <div class="warp-content">
             <el-date-picker
               style="width: 100%;"
-              v-model="value1"
+              v-model="dataValue"
               type="daterange"
               range-separator="至"
               start-placeholder="开始日期"
@@ -47,7 +47,7 @@
           <label for="">关键字：&nbsp;&nbsp;</label>
           <div class="warp-content">
             <el-select
-              v-model="formInline.region"
+              v-model="categoryValue.region"
               placeholder="请选择"
               style="width: 100%;"
             >
@@ -81,7 +81,7 @@
           type="danger"
           class="pull-right"
           style="width: 100%;"
-          @click="dialogTableVisible = true"
+          @click="dialog_Info=true"
         >新增</el-button>
       </el-col>
     </el-row>
@@ -101,25 +101,27 @@
       >
       </el-table-column>
       <el-table-column
-        prop="date"
+        prop="title"
+        label="标题"
+        width="550"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="categoryId"
+        label="类型"
+        width="130"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="createDate"
         label="日期"
-        width="100"
+        width="170"
       >
       </el-table-column>
       <el-table-column
-        prop="name"
-        label="姓名"
-        width="100"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址"
-      >
-      </el-table-column>
-      <el-table-column
-        prop="address"
-        label="地址"
+        prop="user"
+        label="管理员"
+        width="115"
       >
       </el-table-column>
       <el-table-column label="操作">
@@ -147,56 +149,32 @@
     </el-pagination>
 
     <!-- 弹窗 -->
-    <el-dialog
-      title="收货地址"
-      :visible.sync="dialogTableVisible"
-      :modal-append-to-body='false'
-    >
-        <el-table >
-          123
-        </el-table>
-      </el-dialog>
-    </el-dialog>
+    <dialogInfo :flag="dialog_Info" @close="closeDialog"></dialogInfo>
+
   </div>
 </template>
 <script>
+import dialogInfo from "./dialog/info";
 export default {
   name: "infoIndex",
+  components: { dialogInfo },
   data() {
     return {
-      formInline: {
+      categoryValue: {
         user: "",
         region: ""
       },
-      value1: "123",
-      dialogTableVisible: false,
-      tableData: [
-        {
-          date: "2016-05-02",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1518 弄"
-        },
-        {
-          date: "2016-05-04",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1517 弄"
-        },
-        {
-          date: "2016-05-01",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1519 弄"
-        },
-        {
-          date: "2016-05-03",
-          name: "王小虎",
-          address: "上海市普陀区金沙江路 1516 弄"
-        }
-      ]
+      dataValue: "123",
+      dialog_Info: false,
+      tableData: []
     };
   },
   methods: {
     handleEdit(index, row) {
       console.log(index, row);
+    },
+    closeDialog(flag){
+      this.dialog_Info = flag;
     },
     handleDelete(index, row) {
       console.log(index, row);
