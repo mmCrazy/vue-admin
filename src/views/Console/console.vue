@@ -1,6 +1,6 @@
 <template lang="">
     <div class="echart-wrap">
-       <div id="myChart" :style="{float:'left' ,width: '300px', height: '300px'}"></div>
+       <div class="margin" id="myChart" :style="{float:'left' ,width: '500px', height: '300px' }"></div>
      <echart classify="oneCircle" :dataArray="oneCircleEchart" :style="{float:'left',width: '300px', height: '300px'}"></echart>
     </div>
 </template>
@@ -32,22 +32,64 @@ export default {
     this.drawLine();
   },
   methods: {
+    dataValue(arr, value) {
+      let data = [];
+      for (let i in arr) {
+        data.push(arr[i][value]);
+      }
+      return data;
+    },
     drawLine() {
       // 基于准备好的dom，初始化echarts实例
       let myChart = this.$echarts.init(document.getElementById("myChart"));
       // 绘制图表
+
       myChart.setOption({
-        title: { text: "在Vue中使用echarts" },
+        title: { text: "海贼王战力值" },
         tooltip: {},
         xAxis: {
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"]
+          data: this.dataValue(this.oneCircleEchart, "name")
         },
         yAxis: {},
         series: [
           {
-            name: "销量",
+            name: "战力",
             type: "bar",
-            data: [5, 20, 36, 10, 10, 20]
+            data: this.dataValue(this.oneCircleEchart, "value"),
+            itemStyle: {
+              normal: {
+                color: function(params) {
+                  // build a color map as your need.
+                  var colorList = [
+                    "#6481f1",
+                    "#53efa8",
+                    "#ffde00",
+                    "#ff7e6b",
+                    "#b696ff",
+
+                    "#13cefa",
+                    "#6e8dff",
+                    "#53efa8",
+                    "#ffde00",
+                    "#ff7e6b",
+
+                    "#D7504B",
+                    "#C6E579",
+                    "#F4E001",
+                    "#F0805A",
+                    "#26C0C0"
+                  ];
+
+                  return colorList[params.dataIndex];
+                }, //以下为是否显示，显示位置和显示格式的设置了
+                label: {
+                  show: true,
+                  position: "top",
+                  //formatter: '{c}'
+                  formatter: "{b}\n{c}"
+                }
+              }
+            }
           }
         ]
       });
@@ -56,8 +98,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-.echart-wrap{
-    width: 600px;
-    margin: 0 auto;
+.echart-wrap {
+  width: 900px;
+  margin: 80px auto;
+}
+.margin {
+    margin-right: 30px;
 }
 </style>

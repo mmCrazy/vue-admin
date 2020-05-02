@@ -124,7 +124,10 @@
         width="115"
       >
       </el-table-column>
-      <el-table-column label="操作" width="160">
+      <el-table-column
+        label="操作"
+        width="160"
+      >
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -141,15 +144,26 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-button>批量删除</el-button>
-    <el-pagination
-      class="pull-right"
-      background
-      layout="prev, pager, next"
-      :total="100"
-    >
-    </el-pagination>
 
+    <!-- 底部分页 -->
+    <el-row>
+      <el-col :span="12">
+        <el-button
+          type="primary"
+          plain
+          @click="deleteAll"
+        >批量删除</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-pagination
+          class="pull-right"
+          background
+          layout="prev, pager, next"
+          :total="100"
+        >
+        </el-pagination>
+      </el-col>
+    </el-row>
     <!-- 弹窗 -->
     <dialogInfo
       :flag="dialog_Info"
@@ -173,28 +187,28 @@ export default {
       dialog_Info: false,
       tableData: [
         {
-          title:"海贼王",
-          categoryId:"热血动漫",
+          title: "海贼王",
+          categoryId: "热血动漫",
           createDate: "2020-05-02",
-          user: "路飞",
+          user: "路飞"
         },
         {
-          title:"海贼王",
-          categoryId:"热血动漫",
+          title: "海贼王",
+          categoryId: "热血动漫",
           createDate: "2020-05-02",
-          user: "路飞",
+          user: "路飞"
         },
         {
-          title:"海贼王",
-          categoryId:"热血动漫",
+          title: "海贼王",
+          categoryId: "热血动漫",
           createDate: "2020-05-02",
-          user: "路飞",
+          user: "路飞"
         },
         {
-          title:"海贼王",
-          categoryId:"热血动漫",
+          title: "海贼王",
+          categoryId: "热血动漫",
           createDate: "2020-05-02",
-          user: "路飞",
+          user: "路飞"
         }
       ]
     };
@@ -203,11 +217,52 @@ export default {
     handleEdit(index, row) {
       console.log(index, row);
     },
+    //弹窗
     closeDialog(flag) {
       this.dialog_Info = flag;
     },
+    //删除对应项
     handleDelete(index, row) {
+      this.$confirm("永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
       console.log(index, row);
+    },
+    // 删除所有
+    deleteAll() {
+      this.$confirm("永久删除所有文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+        center: true
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     toggleSelection(rows) {
       if (rows) {
