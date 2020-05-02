@@ -18,12 +18,13 @@ export default {
 }
 .main-content {
   position: fixed;
-  top: 75px;
+  top: 75px + 30px;
   right: 0;
   left: $navMenu;
   height: 100%;
   // width: 100%;
   border: 30px solid #f7f7f7;
+  border-top: none;
   background-color: #fff;
   @include webkit(transition, all 0.3s ease 0s);
 }
