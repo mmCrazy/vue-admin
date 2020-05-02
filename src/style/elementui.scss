@@ -42,3 +42,20 @@ div.el-table {
 .el-table-column--selection .cell{
     padding-right: 9px;
 }
+
+/* dialog 弹窗样式 */
+.el-dialog__body {
+    padding: 30px 47px !important;
+}
+.el-form-item--large{
+    .el-form-item__content{
+        text-align: center;
+        margin: 0 !important;
+    }
+    .el-button {
+        width: 100px;
+    }
+    .el-button+.el-button{
+        margin-left: 30px;
+    }
+}

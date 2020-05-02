@@ -71,14 +71,14 @@
       </el-col>
       <el-col :span="2">
         <el-button
-          type="danger"
+          type="primary"
           style="width: 100%;"
         >搜索</el-button>
       </el-col>
       <el-col :span="3">&nbsp;</el-col>
       <el-col :span="2">
         <el-button
-          type="danger"
+          type="primary"
           class="pull-right"
           style="width: 100%;"
           @click="dialog_Info=true"
@@ -103,7 +103,7 @@
       <el-table-column
         prop="title"
         label="标题"
-        width="550"
+        width=""
       >
       </el-table-column>
       <el-table-column
@@ -124,16 +124,18 @@
         width="115"
       >
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column label="操作" width="160">
         <template slot-scope="scope">
           <el-button
             size="mini"
-            type="success"
-            @click="handleEdit(scope.$index, scope.row)"
+            type="primary"
+            plain
+            @click="dialog_Info=true"
           >编辑</el-button>
           <el-button
             size="mini"
             type="danger"
+            plain
             @click="handleDelete(scope.$index, scope.row)"
           >删除</el-button>
         </template>
@@ -149,7 +151,10 @@
     </el-pagination>
 
     <!-- 弹窗 -->
-    <dialogInfo :flag="dialog_Info" @close="closeDialog"></dialogInfo>
+    <dialogInfo
+      :flag="dialog_Info"
+      @close="closeDialog"
+    ></dialogInfo>
 
   </div>
 </template>
@@ -166,14 +171,39 @@ export default {
       },
       dataValue: "123",
       dialog_Info: false,
-      tableData: []
+      tableData: [
+        {
+          title:"海贼王",
+          categoryId:"热血动漫",
+          createDate: "2020-05-02",
+          user: "路飞",
+        },
+        {
+          title:"海贼王",
+          categoryId:"热血动漫",
+          createDate: "2020-05-02",
+          user: "路飞",
+        },
+        {
+          title:"海贼王",
+          categoryId:"热血动漫",
+          createDate: "2020-05-02",
+          user: "路飞",
+        },
+        {
+          title:"海贼王",
+          categoryId:"热血动漫",
+          createDate: "2020-05-02",
+          user: "路飞",
+        }
+      ]
     };
   },
   methods: {
     handleEdit(index, row) {
       console.log(index, row);
     },
-    closeDialog(flag){
+    closeDialog(flag) {
       this.dialog_Info = flag;
     },
     handleDelete(index, row) {
