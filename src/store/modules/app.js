@@ -1,10 +1,10 @@
 import { Login } from "../../api/login";
-import { setToken, setUserName, getUserName } from "../../utils/app";
+import { setToken, getToken, setUserName, getUserName } from "../../utils/app";
 const state = {
     isCollapse: JSON.parse(sessionStorage.getItem("isCollapse")) || false,
     // isCollapse: JSON.parse(Cookie.get("isCollapse")) || false
     username: getUserName() || "",
-    admin_token: ""
+    admin_token: getToken() || ""
 };
 
 const getters = {
