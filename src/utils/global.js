@@ -14,6 +14,7 @@ export default {
                 //   type: 'info',
                 //   message: '已取消删除'
                 // });
+                console.log("取消")
               });
         };
     }
