@@ -223,47 +223,27 @@ export default {
     },
     //删除对应项
     handleDelete(index, row) {
-      this.$confirm("永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center: true
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+      this.myComfirm({
+        content: "永久删除该文件,是否继续",
+        tip: "警告",
+        fn: this.confirmDelete
+      });
       console.log(index, row);
     },
     // 删除所有
     deleteAll() {
-      this.$confirm("永久删除所有文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-        center: true
-      })
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "删除成功!"
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
+      this.myComfirm({
+        content: "永久删除所选文件,是否继续",
+        tip: "提示",
+        fn: this.confirmDelete
+      });
     },
+    // 回调执行删除文件操作
+    confirmDelete(){
+      console.log("删除所选文件")
+    },
+
+    
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {

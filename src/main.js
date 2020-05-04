@@ -11,6 +11,9 @@ Vue.prototype.$echarts = echarts;
 // 路由守卫
 import "./router/premit";
 
+// 自定义全局方法
+import global from "./utils/global";
+Vue.use(global);
 //自定义全局组件
 import "./icon/icon";
 

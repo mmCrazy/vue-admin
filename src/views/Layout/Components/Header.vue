@@ -1,11 +1,11 @@
 <template lang="">
     <div id="header-wrap">
         <div class="pull-left header-icon"><svg-icon iconClass="menu" className="menu" @click="navMenuState" /></div>
-        <div class="pull-right header-icon">
+        <div class="pull-right">
             <div class="user-info pull-left">
                  <img src="../../../assets/images/userHeader.png" alt="">{{username}}
             </div>
-            <div class="header-info pull-left" @click="exit">
+            <div class="header-icon pull-left"  @click="exit">
                 <svg-icon iconClass="exit" className="exit" />
             </div>
         </div>
@@ -65,6 +65,7 @@ export default {
   }
 }
 .header-icon {
+  border-left: 1px solid rgb(224, 223, 223);
   padding: 0 32px;
   svg {
     font-size: 26px;
