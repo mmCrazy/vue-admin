@@ -15,7 +15,16 @@ import service from "../utils/request";
 /**
  * 删除
  */
-
+/**
+ * 删除分类
+ */
+export function DeleteCategory(data){
+    return service.request({
+        method: "post",
+        url: "/news/deleteCategory/",
+        data
+    })
+}
 
  /**
   * 添加分类

@@ -243,7 +243,7 @@ export default {
       console.log("删除所选文件")
     },
 
-    
+
     toggleSelection(rows) {
       if (rows) {
         rows.forEach(row => {

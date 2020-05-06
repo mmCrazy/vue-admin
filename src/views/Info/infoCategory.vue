@@ -2,7 +2,7 @@
   <div id="category">
     <el-button
       type="danger"
-      @click="addFirst"
+      @click="addFirst({type:'category_first_add'})"
     >添加一级分类</el-button>
     <hr class="hr-e9e9e9" />
     <div>
@@ -22,7 +22,7 @@
                   <el-button
                     size="mini"
                     type="danger"
-                    @click="editCategory()"
+                    @click="editCategory({data:firstItem,type:'category_first_edit'})"
                     round
                   >编辑</el-button>
                   <el-button
@@ -34,7 +34,7 @@
                   <el-button
                     size="mini"
                     round
-                    @click="deleteCategoryComfirm()"
+                    @click="deleteCategoryComfirm(firstItem.id)"
                   >删除</el-button>
                 </div>
               </h4>
@@ -106,7 +106,8 @@
 import {
   AddFristCategory,
   AddChildrenCategory,
-  GetCategory
+  GetCategory,
+  DeleteCategory
 } from "../../api/news";
 export default {
   name: "infoCategory",
@@ -131,6 +132,10 @@ export default {
       category_first_disabled: true,
       category_children_disabled: true,
       submit_button_disabled: true,
+      // 记录删除的id
+      deleteId: "",
+      // 记录打开是哪个级
+      subit_button_type:''
     };
   },
 
@@ -139,12 +144,16 @@ export default {
   },
   methods: {
     // 添加一级分类
-    addFirst() {
+    addFirst(params) {
+      // 记录为一级分类
+      this.subit_button_type = params.type;
+      console.log(this.subit_button_type)
+      // 一级输入框和子级输入框的显示与隐藏
       this.category_first_input = true;
       this.category_children_input = false;
       // 禁用重置
       this.category_first_disabled = false;
-     this.submit_button_disabled = false;
+      this.submit_button_disabled = false;
     },
     // 添加分类请求数据获取
     getCategory() {
@@ -157,9 +166,49 @@ export default {
         })
         .catch(error => {});
     },
-    editCategory() {},
+    // 修改编辑
+    editCategory(params) {
+      // 隐藏子级输入框
+      this.category_children_input = false;
+      this.category_first_disabled = false;
+      this.submit_button_disabled = false;
+      console.log(params);
+      // 记录分类得级别
+      this.subit_button_type = params.type;
+      console.log(this.subit_button_type)
+      // 编辑同步输入框的value
+      this.form.categoryName = params.data.category_name;
+    },
     handlerAddChildren() {},
-    deleteCategoryComfirm() {},
+    // 删除分类
+    deleteCategoryComfirm(categoryId) {
+      this.deleteId = categoryId;
+      this.myComfirm({
+        content: "永久删除所选文件,是否继续",
+        tip: "提示",
+        fn: this.deleteCategory,
+        catchFn: () => {
+          this.deleteId = "";
+          console.log("去掉deleteId的值");
+        }
+      });
+    },
+    // 删除分类的弹窗回调
+    deleteCategory() {
+      DeleteCategory({ categoryId: this.deleteId })
+        .then(response => {
+          let index = this.category.item.findIndex(
+            item => item.id == this.deleteId
+          );
+          // 使用filter过滤的方法 过滤掉与目标值不相等的值,返回一个数组,目标值被除掉了
+          // let index = this.categoty.item.filter(item=>item.id !== this.deleteId)
+          // this.category.item = index
+          this.category.item.splice(index, 1);
+          console.log(response);
+        })
+        .catch(error => {});
+    },
+
     // 提交添加
     submit() {
       if (!this.form.categoryName) {
