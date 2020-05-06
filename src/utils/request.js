@@ -3,6 +3,7 @@
  */
  import axios from 'axios';
  import { Message } from 'element-ui';
+ import {getToken,getUserName } from './app'
 
  const BASEURL = process.env.NODE_ENV === 'production' ? '' : '/devApi';  //此处的/devApi是将vue.config.js文件中/devApi的替换过来
 
@@ -20,9 +21,8 @@
     //userId
     //sui
     //业务需求
-    config.headers['Tokey'] = "123";
-    config.headers['userId'] = "MZH";
-    config.headers['sui'] = "456";
+    config.headers['Tokey'] = getToken();
+    config.headers['UserName'] = getUserName();
     
     return config;
   }, function (error) {

@@ -2,7 +2,7 @@
   <div id="category">
     <el-button
       type="danger"
-      @click="addFirst()"
+      @click="addFirst"
     >添加一级分类</el-button>
     <hr class="hr-e9e9e9" />
     <div>
@@ -11,12 +11,13 @@
           <div class="category-wrap">
             <div
               class="category"
-              
+              v-for="firstItem in category.item"
+              :key="firstItem.id"
             >
               <!--一级分类-->
               <h4>
                 <svg-icon icon-class="plus"></svg-icon>
-                123
+                {{firstItem.category_name}}
                 <div class="button-group">
                   <el-button
                     size="mini"
@@ -38,11 +39,12 @@
                 </div>
               </h4>
               <!--子级分类-->
-              <ul v-if="true">
+              <ul v-if="firstItem.children">
                 <li
-                 
+                  v-for="childrenItem in firstItem.children"
+                  :key="childrenItem.id"
                 >
-                    132
+                  132
                   <div class="button-group">
                     <el-button
                       size="mini"
@@ -64,34 +66,34 @@
           <el-form
             label-width="142px"
             class="from-wrap"
-            ref=""
+            ref="categoryForm"
           >
             <el-form-item
               label="一级分类名称："
               prop=""
-              v-if="true"
+              v-if="category_first_input"
             >
               <el-input
-               
-                :disabled="false"
+                v-model="form.categoryName"
+                :disabled="category_first_disabled"
               ></el-input>
             </el-form-item>
             <el-form-item
               label="二级分类名称："
               prop=""
-              v-if="true"
+              v-if="category_children_input"
             >
               <el-input
-                
-                :disabled="false"
+                v-model="form.secCategoryName"
+                :disabled="category_children_disabled"
               ></el-input>
             </el-form-item>
             <el-form-item>
               <el-button
                 type="danger"
                 @click="submit"
+                :disabled="submit_button_disabled"
                 :loading="submit_button_loading"
-                :disabled="false"
               >确定</el-button>
             </el-form-item>
           </el-form>
@@ -101,19 +103,100 @@
   </div>
 </template>
 <script>
+import {
+  AddFristCategory,
+  AddChildrenCategory,
+  GetCategory
+} from "../../api/news";
 export default {
   name: "infoCategory",
   data() {
-    return {};
+    return {
+      // 输入框的value
+      form: {
+        categoryName: "",
+        secCategoryName: ""
+      },
+      // 左侧分级的value
+      category: {
+        item: [],
+        current: []
+      },
+      // loading
+      submit_button_loading: false,
+      // 控制输入框
+      category_first_input: true,
+      category_children_input: true,
+      // 禁用输入框和按钮
+      category_first_disabled: true,
+      category_children_disabled: true,
+      submit_button_disabled: true,
+    };
+  },
+
+  mounted() {
+    this.getCategory();
   },
   methods: {
-    addFirst(){},
-    editCategory(){},
-    handlerAddChildren(){},
-    deleteCategoryComfirm(){},
-    submit(){},
-
-  },
+    // 添加一级分类
+    addFirst() {
+      this.category_first_input = true;
+      this.category_children_input = false;
+      // 禁用重置
+      this.category_first_disabled = false;
+     this.submit_button_disabled = false;
+    },
+    // 添加分类请求数据获取
+    getCategory() {
+      GetCategory()
+        .then(response => {
+          console.log(response);
+          let data = response.data.data.data;
+          this.category.item = data;
+          console.log(this.category, item);
+        })
+        .catch(error => {});
+    },
+    editCategory() {},
+    handlerAddChildren() {},
+    deleteCategoryComfirm() {},
+    // 提交添加
+    submit() {
+      if (!this.form.categoryName) {
+        this.$message({
+          message: "输入不能为空！",
+          type: "error"
+        });
+        return false;
+      }
+      // 按钮loading
+      this.submit_button_loading = true;
+      // 请求数据
+      AddFristCategory({ categoryName: this.form.categoryName })
+        .then(response => {
+          let data = response.data;
+          if (data.resCode === 0) {
+            this.$message({
+              message: data.message,
+              type: "success"
+            });
+            this.category.item.push(response.data.data);
+            // this.getCategory();
+          }
+          console.log(data);
+          // 请求成功后重置按钮loading
+          this.submit_button_loading = false;
+          this.form.categoryName = "";
+          this.form.secCategoryName = "";
+        })
+        .catch(error => {
+          this.submit_button_loading = false;
+          this.form.categoryName = "";
+          this.form.secCategoryName = "";
+          console.log(error);
+        });
+    }
+  }
 };
 </script>
 <style lang="scss" scoped>
