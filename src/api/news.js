@@ -9,9 +9,15 @@ import service from "../utils/request";
   */
  
   /**
-   * 编辑
+   * 修改与编辑
    */
-
+  export function EditCategory(data){
+    return service.request({
+        method: "post",
+        url: "/news/editCategory/",
+        data
+    })
+}
 /**
  * 删除
  */

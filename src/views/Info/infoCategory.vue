@@ -7,7 +7,7 @@
     <hr class="hr-e9e9e9" />
     <div>
       <el-row :gutter="30">
-        <el-col :span="8">
+        <el-col :span="10">
           <div class="category-wrap">
             <div
               class="category"
@@ -61,7 +61,7 @@
             </div>
           </div>
         </el-col>
-        <el-col :span="16">
+        <el-col :span="12">
           <h4 class="menu-title">一级分类编辑</h4>
           <el-form
             label-width="142px"
@@ -107,7 +107,8 @@ import {
   AddFristCategory,
   AddChildrenCategory,
   GetCategory,
-  DeleteCategory
+  DeleteCategory,
+  EditCategory
 } from "../../api/news";
 export default {
   name: "infoCategory",
@@ -135,7 +136,7 @@ export default {
       // 记录删除的id
       deleteId: "",
       // 记录打开是哪个级
-      subit_button_type:''
+      subit_button_type: ""
     };
   },
 
@@ -147,7 +148,7 @@ export default {
     addFirst(params) {
       // 记录为一级分类
       this.subit_button_type = params.type;
-      console.log(this.subit_button_type)
+      console.log(this.subit_button_type);
       // 一级输入框和子级输入框的显示与隐藏
       this.category_first_input = true;
       this.category_children_input = false;
@@ -166,51 +167,18 @@ export default {
         })
         .catch(error => {});
     },
-    // 修改编辑
-    editCategory(params) {
-      // 隐藏子级输入框
-      this.category_children_input = false;
-      this.category_first_disabled = false;
-      this.submit_button_disabled = false;
-      console.log(params);
-      // 记录分类得级别
-      this.subit_button_type = params.type;
-      console.log(this.subit_button_type)
-      // 编辑同步输入框的value
-      this.form.categoryName = params.data.category_name;
-    },
-    handlerAddChildren() {},
-    // 删除分类
-    deleteCategoryComfirm(categoryId) {
-      this.deleteId = categoryId;
-      this.myComfirm({
-        content: "永久删除所选文件,是否继续",
-        tip: "提示",
-        fn: this.deleteCategory,
-        catchFn: () => {
-          this.deleteId = "";
-          console.log("去掉deleteId的值");
-        }
-      });
-    },
-    // 删除分类的弹窗回调
-    deleteCategory() {
-      DeleteCategory({ categoryId: this.deleteId })
-        .then(response => {
-          let index = this.category.item.findIndex(
-            item => item.id == this.deleteId
-          );
-          // 使用filter过滤的方法 过滤掉与目标值不相等的值,返回一个数组,目标值被除掉了
-          // let index = this.categoty.item.filter(item=>item.id !== this.deleteId)
-          // this.category.item = index
-          this.category.item.splice(index, 1);
-          console.log(response);
-        })
-        .catch(error => {});
-    },
 
     // 提交添加
     submit() {
+      if (this.subit_button_type == "category_first_add") {
+        this.addFirstCategory();
+      }
+      if (this.subit_button_type == "category_first_edit") {
+        this.editFirstCategory();
+      }
+    },
+    // 添加一级分类请求和添加
+    addFirstCategory() {
       if (!this.form.categoryName) {
         this.$message({
           message: "输入不能为空！",
@@ -244,6 +212,77 @@ export default {
           this.form.secCategoryName = "";
           console.log(error);
         });
+    },
+
+    // 修改编辑按钮的触发
+    editCategory(params) {
+      // 隐藏子级输入框
+      this.category_children_input = false;
+      this.category_first_disabled = false;
+      this.submit_button_disabled = false;
+      console.log(params);
+      // 记录分类得级别
+      this.subit_button_type = params.type;
+      console.log(this.subit_button_type);
+      // 编辑同步输入框的value
+      this.form.categoryName = params.data.category_name;
+      // 储存当前数据对象
+      this.category.current = params.data;
+    },
+    // 编辑状态的请求和提交
+    editFirstCategory() {
+      if (this.category.current.length == 0) {
+        this.$message({
+          message: "未选择分类！！",
+          type: "error"
+        });
+        return false;
+      }
+      let requestData = {
+        id: this.category.current.id,
+        categoryName: this.form.categoryName
+      };
+      EditCategory(requestData).then(response => {
+        let responseData = response.data;
+        this.$message({
+          message: responseData.message,
+          type: "success"
+        });
+        this.category.current.category_name =
+          responseData.data.data.categoryName;
+        // 清空输入框
+        this.form.categoryName = "";
+        this.category.current = [];
+      });
+    },
+    handlerAddChildren() {},
+    // 删除分类
+    deleteCategoryComfirm(categoryId) {
+      this.deleteId = categoryId;
+      this.myComfirm({
+        content: "永久删除所选文件,是否继续",
+        tip: "提示",
+        fn: this.deleteCategory,
+        catchFn: () => {
+          this.deleteId = "";
+          console.log("去掉deleteId的值");
+        }
+      });
+    },
+    // 删除分类的弹窗回调
+    deleteCategory() {
+      DeleteCategory({ categoryId: this.deleteId })
+        .then(response => {
+          let index = this.category.item.findIndex(
+            item => item.id == this.deleteId
+          );
+          // 使用filter过滤的方法 过滤掉与目标值不相等的值,返回一个数组,目标值被除掉了
+          // let index = this.categoty.item.filter(item=>item.id !== this.deleteId)
+          // this.category.item = index
+          this.category.item.splice(index, 1);
+          console.log(response);
+        })
+        .catch(error => {});
     }
   }
 };
