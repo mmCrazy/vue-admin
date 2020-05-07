@@ -9,18 +9,17 @@
           <label for="">类型：</label>
           <div class="warp-content">
             <el-select
-              v-model="categoryValue.region"
+              v-model="category"
               placeholder="请选择"
               style="width: 100%;"
             >
               <el-option
-                label="区域一"
-                value="shanghai"
+                v-for="item in categoryValue.item"
+                :key="item.id"
+                :label='item.category_name'
+                :value="item.id"
               ></el-option>
-              <el-option
-                label="区域二"
-                value="beijing"
-              ></el-option>
+
             </el-select>
           </div>
         </div>
@@ -47,13 +46,13 @@
           <label for="">关键字：&nbsp;&nbsp;</label>
           <div class="warp-content">
             <el-select
-              v-model="categoryValue.region"
+              v-model="categoryValue"
               placeholder="请选择"
               style="width: 100%;"
             >
               <el-option
                 label="区域一"
-                value="shanghai"
+                value=" "
               ></el-option>
               <el-option
                 label="区域二"
@@ -168,6 +167,7 @@
     <dialogInfo
       :flag="dialog_Info"
       @close="closeDialog"
+      :category="categoryValue.item"
     ></dialogInfo>
 
   </div>
@@ -179,10 +179,8 @@ export default {
   components: { dialogInfo },
   data() {
     return {
-      categoryValue: {
-        user: "",
-        region: ""
-      },
+      category:'',
+      categoryValue: { item: [] },
       dataValue: "123",
       dialog_Info: false,
       tableData: [
@@ -213,6 +211,21 @@ export default {
       ]
     };
   },
+  mounted() {
+    this.$store
+      .dispatch("common/getInfoCategory")
+      .then(response => {
+        let data = response.data.data.data;
+        this.categoryValue.item = data
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  },
+  watch: {
+
+  },
+
   methods: {
     handleEdit(index, row) {
       console.log(index, row);
@@ -239,10 +252,9 @@ export default {
       });
     },
     // 回调执行删除文件操作
-    confirmDelete(){
-      console.log("删除所选文件")
+    confirmDelete() {
+      console.log("删除所选文件");
     },
-
 
     toggleSelection(rows) {
       if (rows) {

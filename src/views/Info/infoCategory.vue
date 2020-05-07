@@ -160,7 +160,7 @@ export default {
     getCategory() {
       GetCategory()
         .then(response => {
-          console.log(response);
+          // console.log(response);
           let data = response.data.data.data;
           this.category.item = data;
           console.log(this.category, item);
@@ -280,7 +280,7 @@ export default {
           // let index = this.categoty.item.filter(item=>item.id !== this.deleteId)
           // this.category.item = index
           this.category.item.splice(index, 1);
-          console.log(response);
+          // console.log(response);
         })
         .catch(error => {});
     }

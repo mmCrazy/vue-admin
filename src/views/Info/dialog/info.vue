@@ -6,6 +6,7 @@
       @close="closeDialog"
       :modal-append-to-body='false'
       width="580px"
+      @open="openDialog"
     >
 
       <el-form
@@ -20,20 +21,25 @@
             placeholder="请输入类别"
           >
             <el-option
-              label="区域一"
-              value="shanghai"
-            ></el-option>
-            <el-option
-              label="区域二"
-              value="beijing"
+              v-for="item in category"
+              :key="item.id"
+              :label="item.category_name"
+              :value="item.category_name"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="标题">
-          <el-input v-model="form.name" placeholder="请输入标题"></el-input>
+          <el-input
+            v-model="form.name"
+            placeholder="请输入标题"
+          ></el-input>
         </el-form-item>
         <el-form-item label="概述">
-          <el-input type="textarea" v-model="form.name" placeholder="请输入概述"></el-input>
+          <el-input
+            type="textarea"
+            v-model="form.name"
+            placeholder="请输入概述"
+          ></el-input>
         </el-form-item>
         <el-form-item size="large">
           <el-button @click="closeDialog">取消</el-button>
@@ -70,6 +76,10 @@ export default {
     flag: {
       type: Boolean,
       default: false
+    },
+    category: {
+      type: Array,
+      default: () => []
     }
   },
   methods: {
@@ -79,6 +89,9 @@ export default {
 
     onSubmit() {
       console.log("submit!");
+    },
+    openDialog() {
+      console.log(this.category);
     }
   },
   watch: {
