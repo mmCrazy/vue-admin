@@ -46,16 +46,16 @@
           <label for="">关键字：&nbsp;&nbsp;</label>
           <div class="warp-content">
             <el-select
-              v-model="categoryValue"
+              v-model="categoryId"
               placeholder="请选择"
               style="width: 100%;"
             >
               <el-option
-                label="区域一"
+                label="Id"
                 value=" "
               ></el-option>
               <el-option
-                label="区域二"
+                label="id2"
                 value="beijing"
               ></el-option>
             </el-select>
@@ -89,7 +89,7 @@
     <el-table
       ref="multipleTable"
       @selection-change="handleSelectionChange"
-      :data="tableData"
+      :data="tableData.item"
       border
       style="width: 100%;margin-bottom: 20px"
     >
@@ -157,8 +157,11 @@
         <el-pagination
           class="pull-right"
           background
-          layout="prev, pager, next"
-          :total="100"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :page-sizes="[5, 10, 15, 20]"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
         >
         </el-pagination>
       </el-col>
@@ -174,61 +177,72 @@
 </template>
 <script>
 import dialogInfo from "./dialog/info";
+import { GetList } from "../../api/news";
 export default {
   name: "infoIndex",
   components: { dialogInfo },
   data() {
     return {
-      category:'',
+      // 分类
+      category: "",
+      // 关键字
+      categoryId: "",
+      // 分类的数据
       categoryValue: { item: [] },
+      // 日期
       dataValue: "123",
+      // 控制弹窗显示
       dialog_Info: false,
-      tableData: [
-        {
-          title: "海贼王",
-          categoryId: "热血动漫",
-          createDate: "2020-05-02",
-          user: "路飞"
-        },
-        {
-          title: "海贼王",
-          categoryId: "热血动漫",
-          createDate: "2020-05-02",
-          user: "路飞"
-        },
-        {
-          title: "海贼王",
-          categoryId: "热血动漫",
-          createDate: "2020-05-02",
-          user: "路飞"
-        },
-        {
-          title: "海贼王",
-          categoryId: "热血动漫",
-          createDate: "2020-05-02",
-          user: "路飞"
-        }
-      ]
+      // 列表数据
+      tableData: { item: [] },
+      // 页码总数
+      total: 0,
+      // 页码
+      page: { pageNumber: 1, pageSize: 5 }
     };
   },
   mounted() {
-    this.$store
-      .dispatch("common/getInfoCategory")
-      .then(response => {
-        let data = response.data.data.data;
-        this.categoryValue.item = data
-      })
-      .catch(error => {
-        console.log(error);
-      });
+    // 获取分类
+    this.getInfoCategory();
+    // 获取列表
+    this.getInfoList();
   },
-  watch: {
-
-  },
+  watch: {},
 
   methods: {
-    handleEdit(index, row) {
-      console.log(index, row);
+    // 获取分类发送请求
+    getInfoCategory() {
+      this.$store
+        .dispatch("common/getInfoCategory")
+        .then(response => {
+          let data = response.data.data.data;
+          this.categoryValue.item = data;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+    // 获取信息列表发送请求
+    getInfoList() {
+      let requestData = {
+        categoryId: "",
+        startTiem: "",
+        endTime: "",
+        title: "",
+        id: "",
+        pageNumber: this.page.pageNumber,
+        pageSize: this.page.pageSize
+      };
+      GetList(requestData)
+        .then(response => {
+          let data = response.data.data;
+          // console.log(data)
+          this.tableData.item = data.data;
+          this.total = data.total;
+        })
+        .catch(error => {
+          console.log(error);
+        });
     },
     //弹窗
     closeDialog(flag) {
@@ -265,6 +279,20 @@ export default {
         this.$refs.multipleTable.clearSelection();
       }
     },
+    // 页码
+    handleSizeChange(val) {
+      this.page.pageSize = val;
+      this.getInfoList();
+      console.log(val);
+    },
+    // 点击的页码
+    handleCurrentChange(val) {
+      this.page.pageNumber = val;
+      // 更改页面---获取对应页码的数据
+      this.getInfoList();
+      console.log(val);
+    },
+
     handleSelectionChange(val) {
       this.multipleSelection = val;
     }

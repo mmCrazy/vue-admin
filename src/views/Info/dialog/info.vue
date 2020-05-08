@@ -17,27 +17,27 @@
 
         <el-form-item label="类别">
           <el-select
-            v-model="form.region"
+            v-model="form.category"
             placeholder="请输入类别"
           >
             <el-option
               v-for="item in category"
               :key="item.id"
               :label="item.category_name"
-              :value="item.category_name"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="标题">
           <el-input
-            v-model="form.name"
+            v-model="form.title"
             placeholder="请输入标题"
           ></el-input>
         </el-form-item>
         <el-form-item label="概述">
           <el-input
             type="textarea"
-            v-model="form.name"
+            v-model="form.content"
             placeholder="请输入概述"
           ></el-input>
         </el-form-item>
@@ -46,6 +46,7 @@
           <el-button
             type="primary"
             @click="onSubmit"
+            :loading="submit_loading_type"
           >确认</el-button>
         </el-form-item>
       </el-form>
@@ -55,21 +56,21 @@
   </div>
 </template>
 <script>
+import { AddInfo } from "../../../api/news";
 export default {
   name: "dialogInfo",
   data() {
     return {
+      // 控制表单显示和隐藏
       dialog_info: false,
+      // 表单数据
       form: {
-        name: "",
-        region: "",
-        date1: "",
-        date2: "",
-        delivery: false,
-        type: [],
-        resource: "",
-        desc: ""
-      }
+        category: "",
+        title: "",
+        content: ""
+      },
+      // 提交按钮loading状态
+      submit_loading_type: false
     };
   },
   props: {
@@ -83,11 +84,54 @@ export default {
     }
   },
   methods: {
+    // 取消提交
     closeDialog() {
+      // 重置表单
+      this.resetFields();
+      // 关闭窗口
       this.$emit("close", false);
     },
-
+    // 重置表单
+    resetFields() {
+      this.form.category = "";
+      this.form.title = "";
+      this.form.content = "";
+    },
+    // 提交表单
     onSubmit() {
+      if (!this.form.category) {
+        this.$message({
+          message: "分类不能为空",
+          type: "error"
+        });
+        return false;
+      }
+      // 按钮loading状态
+      this.submit_loading_type = true;
+      let form = {
+        category: this.form.category,
+        title: this.form.title,
+        content: this.form.content
+      };
+      AddInfo(form)
+        .then(response => {
+          let data = response.data;
+          console.log(data);
+          this.$message({
+            message: data.message,
+            type: "success"
+          });
+          // 按钮loading状态
+          this.submit_loading_type = false;
+          // 重置表单
+          this.resetFields();
+          // this.$refs["form"].resetFields();
+        })
+        .catch(error => {
+          // 按钮loading状态
+          this.submit_loading_type = false;
+          console.log(error);
+        });
       console.log("submit!");
     },
     openDialog() {
