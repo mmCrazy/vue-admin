@@ -35,6 +35,13 @@ export function GetList(data){
 /**
  * 删除
  */
+export function DeleteInfo(data){
+    return service.request({
+        method: "post",
+        url: "/news/deleteInfo/",
+        data
+    })
+}
 /**
  * 删除分类
  */

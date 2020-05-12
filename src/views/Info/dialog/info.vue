@@ -7,6 +7,7 @@
       :modal-append-to-body='false'
       width="580px"
       @open="openDialog"
+      @getList="getList"
     >
 
       <el-form
@@ -84,6 +85,10 @@ export default {
     }
   },
   methods: {
+    // 刷新列表
+    getList(){
+      this.$emit("getList")
+    },
     // 取消提交
     closeDialog() {
       // 重置表单
@@ -126,6 +131,8 @@ export default {
           // 重置表单
           this.resetFields();
           // this.$refs["form"].resetFields();
+          // 刷新列表
+          this.getList();
         })
         .catch(error => {
           // 按钮loading状态
