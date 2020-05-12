@@ -29,7 +29,7 @@
                     size="mini"
                     type="success"
                     round
-                    @click="handlerAddChildren()"
+                    @click="handlerAddChildren({data:firstItem,type:'category_children_add'})"
                   >添加子级</el-button>
                   <el-button
                     size="mini"
@@ -176,6 +176,9 @@ export default {
       if (this.subit_button_type == "category_first_edit") {
         this.editFirstCategory();
       }
+      if (this.subit_button_type == "category_children_add") {
+        this.addChildrenCategory();
+      }
     },
     // 添加一级分类请求和添加
     addFirstCategory() {
@@ -255,7 +258,52 @@ export default {
         this.category.current = [];
       });
     },
-    handlerAddChildren() {},
+    // 添加二级分类
+    handlerAddChildren(params) {
+      // console.log(params.type);
+      // 一级输入框和子级输入框的显示与隐藏
+      this.category_first_input = true;
+      this.category_children_input = true;
+      // 禁用重置
+      this.category_first_disabled = true;
+      this.category_children_disabled = false;
+      this.submit_button_disabled = false;
+      // 修改一级分类的名字
+      this.form.categoryName = params.data.category_name;
+      // 储存当前数据对象
+      this.category.current = params.data;
+      // 修改提交类型
+
+      this.subit_button_type = params.type;
+    },
+    // 二级分类---发送请求数据
+    addChildrenCategory() {
+      if (!this.form.secCategoryName) {
+        this.$message({
+          message: "子级输入不能为空！",
+          type: "error"
+        });
+        console.log(this.form.secCategoryName);
+        return false;
+      }
+
+      console.log(this.category.current.id);
+      let requestData = {
+        categoryName: this.form.secCategoryName,
+        parentId: this.category.current.id
+      };
+      AddChildrenCategory(requestData)
+        .then(response => {
+          this.$message({
+            message: response.data.message,
+            type: "success"
+          });
+          console.log(response);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     // 删除分类
     deleteCategoryComfirm(categoryId) {
       this.deleteId = categoryId;

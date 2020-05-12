@@ -9,7 +9,17 @@ export function GetList(data){
         data
     })
  }
-
+/**
+ * 修改信息列表
+ * @param {*} data 
+ */
+export function EditInfo(data){
+    return service.request({
+        method: "post",
+        url: "/news/editInfo/",
+        data
+    })
+ }
  /**
   * 新增
   */
@@ -20,10 +30,11 @@ export function GetList(data){
         data
     })
  }
- 
+
+
  
   /**
-   * 修改与编辑
+   * 修改与编辑分类
    */
   export function EditCategory(data){
     return service.request({

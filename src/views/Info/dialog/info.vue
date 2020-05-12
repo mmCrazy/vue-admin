@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-dialog
-      title="新增"
+      :title="DataInfo.value"
       :visible.sync="dialog_info"
       @close="closeDialog"
       :modal-append-to-body='false'
@@ -57,7 +57,7 @@
   </div>
 </template>
 <script>
-import { AddInfo } from "../../../api/news";
+import { AddInfo, EditInfo } from "../../../api/news";
 export default {
   name: "dialogInfo",
   data() {
@@ -66,6 +66,7 @@ export default {
       dialog_info: false,
       // 表单数据
       form: {
+        id: "",
         category: "",
         title: "",
         content: ""
@@ -75,19 +76,40 @@ export default {
     };
   },
   props: {
+    // 弹窗
     flag: {
       type: Boolean,
       default: false
     },
+    // 分类的数据
     category: {
       type: Array,
       default: () => []
+    },
+    // 信息列表是新增还是修改
+    DataInfo: {
+      type: Object,
+      default: () => {}
     }
   },
+  mounted() {},
   methods: {
+    // 判断是否为修改
+    addAndedit() {},
+    // 窗口打开的时候触发
+    openDialog() {
+      // console.log(this.DataInfo.info);
+      // console.log(this.category);
+      if (this.DataInfo.value == "修改") {
+        this.form.id = this.DataInfo.info.id;
+        this.form.category = this.DataInfo.info.categoryId;
+        this.form.title = this.DataInfo.info.title;
+        this.form.content = this.DataInfo.info.content;
+      }
+    },
     // 刷新列表
-    getList(){
-      this.$emit("getList")
+    getList() {
+      this.$emit("getList");
     },
     // 取消提交
     closeDialog() {
@@ -113,36 +135,65 @@ export default {
       }
       // 按钮loading状态
       this.submit_loading_type = true;
-      let form = {
-        category: this.form.category,
-        title: this.form.title,
-        content: this.form.content
-      };
-      AddInfo(form)
-        .then(response => {
-          let data = response.data;
-          console.log(data);
-          this.$message({
-            message: data.message,
-            type: "success"
+      if (this.DataInfo.value == "新增") {
+        let form = {
+          category: this.form.category,
+          title: this.form.title,
+          content: this.form.content
+        };
+        AddInfo(form)
+          .then(response => {
+            let data = response.data;
+            // console.log(data);
+            this.$message({
+              message: data.message,
+              type: "success"
+            });
+            // 按钮loading状态
+            this.submit_loading_type = false;
+            // 重置表单
+            this.resetFields();
+            // this.$refs["form"].resetFields();
+            // 刷新列表
+            this.getList();
+          })
+          .catch(error => {
+            // 按钮loading状态
+            this.submit_loading_type = false;
+            console.log(error);
           });
-          // 按钮loading状态
-          this.submit_loading_type = false;
-          // 重置表单
-          this.resetFields();
-          // this.$refs["form"].resetFields();
-          // 刷新列表
-          this.getList();
-        })
-        .catch(error => {
-          // 按钮loading状态
-          this.submit_loading_type = false;
-          console.log(error);
-        });
+      }
+      if (this.DataInfo.value == "修改") {
+        let form = {
+          id: this.form.id,
+          categoryId: this.form.category,
+          title: this.form.title,
+          content: this.form.content
+        };
+        EditInfo(form)
+          .then(response => {
+            let data = response.data;
+            // console.log(data);
+            this.$message({
+              message: data.message,
+              type: "success"
+            });
+            // 按钮loading状态
+            this.submit_loading_type = false;
+            // // 重置表单
+            // this.resetFields();
+            // this.$refs["form"].resetFields();
+            // 刷新列表
+            this.getList();
+          })
+          .catch(error => {
+            // 按钮loading状态
+            this.submit_loading_type = false;
+            console.log(error);
+          });
+      }
+
       console.log("submit!");
-    },
-    openDialog() {
-      console.log(this.category);
     }
   },
   watch: {

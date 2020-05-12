@@ -82,7 +82,7 @@
           type="primary"
           class="pull-right"
           style="width: 100%;"
-          @click="dialog_Info=true"
+          @click="newInfo"
         >新增</el-button>
       </el-col>
     </el-row>
@@ -137,7 +137,7 @@
             size="mini"
             type="primary"
             plain
-            @click="dialog_Info=true"
+            @click="editInfo(scope.row)"
           >编辑</el-button>
           <el-button
             size="mini"
@@ -175,6 +175,7 @@
     <!-- 弹窗 -->
     <dialogInfo
       :flag="dialog_Info"
+      :DataInfo.sync="DataInfo"
       @close="closeDialog"
       :category="categoryValue.item"
       @getList="getInfoList"
@@ -218,7 +219,12 @@ export default {
       // 数据列表loading
       dataLoading: false,
       //记录删除得id
-      deleteInfoId: ""
+      deleteInfoId: "",
+      // 记录是新增还是修改
+      DataInfo: {
+        value: "",
+        info: {}
+      }
     };
   },
   mounted() {
@@ -230,6 +236,19 @@ export default {
   watch: {},
 
   methods: {
+    // 新增
+    newInfo(){
+      this.dialog_Info=true;
+      this.DataInfo.value = "新增"
+    },
+    // 编辑
+    editInfo(row){
+       this.dialog_Info=true;
+      this.DataInfo.value = "修改"
+      this.DataInfo.info = row;
+      // console.log(this.DataInfo.info)
+
+    },
     // 类型的匹配
     toCategory(row) {
       // console.log(this.categoryValue.item);
@@ -242,7 +261,7 @@ export default {
     },
     search() {
       let requestData = this.formatData();
-      this.getInfoList()
+      this.getInfoList();
     },
     // 时间戳的转换
     toData(row, column, cellValue, index) {
@@ -299,7 +318,7 @@ export default {
     },
     //弹窗
     closeDialog(flag) {
-      this.dialog_Info = flag;
+      this.dialog_Info = flag;      
     },
     //删除对应项
     deleteItem(id) {
