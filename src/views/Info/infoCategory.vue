@@ -54,6 +54,7 @@
                     <el-button
                       size="mini"
                       round
+                      @click="deleteCategoryComfirm(childrenItem.id)"
                     >删除</el-button>
                   </div>
                 </li>
@@ -146,6 +147,8 @@ export default {
   methods: {
     // 添加一级分类
     addFirst(params) {
+      // 清空输入框
+      this.form.categoryName = "";
       // 记录为一级分类
       this.subit_button_type = params.type;
       console.log(this.subit_button_type);
@@ -161,11 +164,13 @@ export default {
       GetCategory()
         .then(response => {
           // console.log(response);
-          let data = response.data.data.data;
+          let data = response.data.data;
           this.category.item = data;
-          console.log(this.category, item);
+          // console.log(this.category.item);
         })
-        .catch(error => {});
+        .catch(error => {
+          console.log(error);
+        });
     },
 
     // 提交添加
@@ -223,7 +228,7 @@ export default {
       this.category_children_input = false;
       this.category_first_disabled = false;
       this.submit_button_disabled = false;
-      console.log(params);
+      // console.log(params);
       // 记录分类得级别
       this.subit_button_type = params.type;
       console.log(this.subit_button_type);
@@ -286,8 +291,7 @@ export default {
         console.log(this.form.secCategoryName);
         return false;
       }
-
-      console.log(this.category.current.id);
+      // console.log(this.category.current.id);
       let requestData = {
         categoryName: this.form.secCategoryName,
         parentId: this.category.current.id
@@ -298,6 +302,10 @@ export default {
             message: response.data.message,
             type: "success"
           });
+          // 刷新分类列表
+          this.getCategory();
+          // 清空子级输入框
+          this.form.secCategoryName = "";
           console.log(response);
         })
         .catch(error => {
@@ -328,9 +336,12 @@ export default {
           // let index = this.categoty.item.filter(item=>item.id !== this.deleteId)
           // this.category.item = index
           this.category.item.splice(index, 1);
+          this.getCategory();
           // console.log(response);
         })
-        .catch(error => {});
+        .catch(error => {
+          console.log(error);
+        });
     }
   }
 };

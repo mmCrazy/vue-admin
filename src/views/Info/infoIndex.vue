@@ -273,7 +273,7 @@ export default {
       this.$store
         .dispatch("common/getInfoCategory")
         .then(response => {
-          let data = response.data.data.data;
+          let data = response.data.data;
           this.categoryValue.item = data;
         })
         .catch(error => {
@@ -364,15 +364,6 @@ export default {
       console.log("删除所选文件");
     },
 
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
-    },
     // 页码
     handleSizeChange(val) {
       this.page.pageSize = val;

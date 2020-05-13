@@ -94,7 +94,7 @@ export function AddChildrenCategory(data){
 export function GetCategory(data){
    return service.request({
        method: "post",
-       url: "/news/getCategory/",
+       url: "/news/getCategoryAll/",
        data
    })
 }
