@@ -130,7 +130,7 @@
       </el-table-column>
       <el-table-column
         label="操作"
-        width="160"
+        width="250"
       >
         <template slot-scope="scope">
           <el-button
@@ -145,6 +145,13 @@
             plain
             @click="deleteItem(scope.row.id)"
           >删除</el-button>
+          <router-link :to="{ name: 'EditInfoDetailed' }" class="margin-left-10">
+            <el-button
+              size="mini"
+              type="primary"
+              plain
+            >编辑详情</el-button>
+          </router-link>
         </template>
       </el-table-column>
     </el-table>
@@ -237,17 +244,16 @@ export default {
 
   methods: {
     // 新增
-    newInfo(){
-      this.dialog_Info=true;
-      this.DataInfo.value = "新增"
+    newInfo() {
+      this.dialog_Info = true;
+      this.DataInfo.value = "新增";
     },
     // 编辑
-    editInfo(row){
-       this.dialog_Info=true;
-      this.DataInfo.value = "修改"
+    editInfo(row) {
+      this.dialog_Info = true;
+      this.DataInfo.value = "修改";
       this.DataInfo.info = row;
       // console.log(this.DataInfo.info)
-
     },
     // 类型的匹配
     toCategory(row) {
@@ -318,7 +324,7 @@ export default {
     },
     //弹窗
     closeDialog(flag) {
-      this.dialog_Info = flag;      
+      this.dialog_Info = flag;
     },
     //删除对应项
     deleteItem(id) {

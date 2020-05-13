@@ -68,6 +68,15 @@ const routes = [
                     name: "信息分类"
                 },
                 component: () => import("../views/Info/infoCategory.vue")
+            },
+            {
+                path: "/editInfoDetailed",
+                name: "EditInfoDetailed",
+                hidden: true,
+                meta: {
+                    name: "编辑详情"
+                },
+                component: () => import("../views/Info/editInfoDetailed.vue")
             }
         ]
     },
