@@ -213,7 +213,19 @@ export default {
         info: {}
       }
     };
-  }
+  },
+  methods: {
+    toData(){},
+    search(){},
+    newInfo(){},
+    editInfo(){},
+    toCategory(){},
+    deleteItem(id){},
+    deleteAll(){},
+    handleSelectionChange(){},
+    handleSizeChange(){},
+    handleCurrentChange(){}
+  },
 };
 </script>
 <style lang="scss" scoped>
