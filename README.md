@@ -1,5 +1,5 @@
 # vue-admin
-# 这是一个后台管理项目
+# 这是一个后台管理系统
 ## 使用到的技术
 ```
 1、vue、vue-cli、vuex、vue-router、
