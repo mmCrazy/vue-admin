@@ -145,13 +145,12 @@
             plain
             @click="deleteItem(scope.row.id)"
           >删除</el-button>
-          <router-link :to="{ name: 'EditInfoDetailed' }" class="margin-left-10">
-            <el-button
-              size="mini"
-              type="primary"
-              plain
-            >编辑详情</el-button>
-          </router-link>
+          <el-button
+            size="mini"
+            type="primary"
+            plain
+            @click="detailed(scope.row)"
+          >编辑详情</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -247,6 +246,30 @@ export default {
     newInfo() {
       this.dialog_Info = true;
       this.DataInfo.value = "新增";
+    },
+    // 编辑详情
+    detailed(data) {
+      // 预先存值
+      this.$store.commit("infoDetailed/UPDATE_STATE_VALUE", {
+        id:{
+          value:data.id,
+          sessionKey:"infoId",
+          session:true
+        },
+        title:{
+          value:data.title,
+          sessionKey:"infoTitle",
+          session:true
+        }
+      });
+      // 路由跳转
+      this.$router.push({
+        name:"EditInfoDetailed",
+        params:{
+          id:data.id,
+          title:data.title
+        }
+      })
     },
     // 编辑
     editInfo(row) {
