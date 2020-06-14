@@ -1,6 +1,6 @@
 <template>
   <div>
-    123
+    编辑详情
   </div>
 </template>
 <script>
